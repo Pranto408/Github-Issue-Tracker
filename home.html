@@ -20,51 +20,124 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="./style.css" />
     <!-- Font Awesome -->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body class="bg-[#F8FAFC] flow-root min-h-screen">
     <header>
-      <div class="navbar bg-base-100 shadow-sm px-10 flex flex-col gap-4 md:flex-row mb-15">
+      <div
+        class="navbar bg-base-100 shadow-sm px-10 flex flex-col gap-4 md:flex-row mb-15"
+      >
         <div class="flex gap-2 items-center flex-1">
           <img class="w-9" src="./assets/github-logo.png" alt="" />
           <h2 class="text-[#1F2937] font-semibold text-2xl">
             GitHub Issues Tracker
           </h2>
         </div>
-        <div class="flex gap-3 ">
+        <div class="flex gap-3">
           <div>
             <label class="input">
-            <svg
-              class="h-[1em] opacity-50"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                stroke-width="2.5"
-                fill="none"
-                stroke="currentColor"
+              <svg
+                class="h-[1em] opacity-50"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
               >
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.3-4.3"></path>
-              </g>
-            </svg>
-            <input type="search" required placeholder="Search issues..." />
-          </label>
+                <g
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </g>
+              </svg>
+              <input type="search" required placeholder="Search issues..." />
+            </label>
           </div>
           <button class="btn btn-primary rounded">Search</button>
         </div>
       </div>
     </header>
 
-    <section>
-      <div id="btn-container" class="w-1110/1600 mx-auto bg-white p-6 rounded-lg shadow flex gap-2 flex-col items-center md:flex-row md:items-start">
-        <button id="all-btn" class="btn w-30 bg-[#4A00FF] text-white">All</button>
-        <button id="open-btn" class="btn w-30">Open</button>
-        <button id="closed-btn" class="btn w-30">Closed</button>
+    <section
+      id="btn-container"
+      class="w-[80%] mx-auto bg-white p-6 rounded-lg shadow flex gap-2 flex-col items-center md:flex-row md:items-start mb-4"
+    >
+      <button id="all-btn" class="btn w-30 bg-[#4A00FF] text-white">All</button>
+      <button id="open-btn" class="btn w-30">Open</button>
+      <button id="closed-btn" class="btn w-30">Closed</button>
+    </section>
+
+    <section
+      class="w-[80%] mx-auto bg-white flex justify-between items-center p-6 border-b-2 border-[#E4E4E7]"
+    >
+      <div class="flex gap-2 items-center">
+        <div class="p-2 bg-[#ECE4FF] rounded-full">
+          <img src="./assets/Aperture.png" alt="" />
+        </div>
+        <div>
+          <h4 class="text-[#1F2937] font-semibold text-xl">
+            <span id="count-issues">0</span> Issues
+          </h4>
+          <p class="text-[#64748B]">Track and manage your project issues</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <p><i class="fa-solid fa-circle text-xs text-[#00A96E]"></i> Open</p>
+        <p><i class="fa-solid fa-circle text-xs text-[#A855F7]"></i> Closed</p>
       </div>
     </section>
+    <!-- Card section  -->
+    <section
+      id="card-container"
+      class="w-[80%] mx-auto p-6 bg-[#FBFBFB] grid grid-cols-4 items-stretch gap-3 rounded-lg shadow-lg"
+    >
+      <div
+        id="card"
+        class="p-4 rounded-lg shadow bg-white border-t-4 border-[#00A96E]"
+      >
+        <div class="flex justify-between items-center mb-3">
+          <img src="./assets/Open-Status.png" alt="" />
+          <button
+            class="text-[#EF4444] bg-[#FEECEC] px-7 py-2 rounded-[100px] uppercase text-sm font-medium"
+          >
+            High
+          </button>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-[#1F2937] mb-2">
+            Fix navigation menu on mobile devices
+          </h4>
+          <p class="text-[#64748B] text-xs mb-3">
+            The navigation menu doesn't collapse properly on mobile devices...
+          </p>
+          <div class="flex gap-2 pb-4 border-b border-[#E4E4E7]">
+            <button
+              class="uppercase border-2 border-[#FECACA] rounded-[100px] bg-[#FEECEC] text-[#EF4444] text-xs font-medium px-2 py-1.5"
+            >
+              <i class="fa-solid fa-bug"></i> Bug
+            </button>
+            <button
+              class="uppercase border-2 border-[#FDE68A] rounded-[100px] bg-[#FFF8DB] text-[#D97706] text-xs font-medium px-2 py-1.5"
+            >
+              <i class="fa-solid fa-life-ring"></i> help wanted
+            </button>
+          </div>
+          <div class="pt-4">
+            <p class="mb-2 text-[#64748B] text-xs">#1 by john_doe</p>
+            <p class="text-[#64748B] text-xs">1/15/2024</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <script src="./scripts/home.js"></script>
   </body>
 </html>
