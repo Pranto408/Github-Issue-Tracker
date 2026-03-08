@@ -29,6 +29,7 @@
     />
   </head>
   <body class="bg-[#F8FAFC] flow-root min-h-screen">
+    <!-- Navbar Section -->
     <header>
       <div
         class="navbar bg-base-100 shadow-sm px-10 flex flex-col gap-4 md:flex-row mb-15"
@@ -58,14 +59,14 @@
                   <path d="m21 21-4.3-4.3"></path>
                 </g>
               </svg>
-              <input type="search" required placeholder="Search issues..." />
+              <input id="search-input" type="search" placeholder="Search issues..." />
             </label>
           </div>
-          <button class="btn btn-primary rounded">Search</button>
+          <button id="search-btn" class="btn btn-primary rounded">Search</button>
         </div>
       </div>
     </header>
-
+    <!-- Toggle Button Section -->
     <section
       id="btn-container"
       class="w-[80%] mx-auto bg-white p-6 rounded-lg shadow flex gap-2 flex-col items-center md:flex-row md:items-start mb-4"
@@ -74,7 +75,7 @@
       <button id="open-btn" class="btn w-30">Open</button>
       <button id="closed-btn" class="btn w-30">Closed</button>
     </section>
-
+    <!-- Issues Count Section  -->
     <section
       class="w-[80%] mx-auto bg-white flex justify-between items-center p-6 border-b-2 border-[#E4E4E7]"
     >
@@ -94,10 +95,11 @@
         <p><i class="fa-solid fa-circle text-xs text-[#A855F7]"></i> Closed</p>
       </div>
     </section>
-    <!-- Card section  -->
-    <div id="loading-spinner" class="hidden justify-center py-10">
+    <!-- Loading Section -->
+    <section id="loading-spinner" class="hidden justify-center py-10">
       <span class="loading loading-spinner loading-lg text-primary"></span>
-    </div>
+    </section>
+    <!-- Card section  -->
     <section
       id="card-container"
       class="w-[80%] mx-auto p-6 bg-[#FBFBFB] grid grid-cols-4 items-stretch gap-3 rounded-lg shadow-lg"
@@ -140,7 +142,7 @@
         </div>
       </div> -->
     </section>
-    <!-- Modal Part  -->
+    <!-- Modal dialog Part  -->
     <dialog id="issue-modal" class="modal">
       <div class="modal-box w-11/12 max-w-lg p-6 bg-white rounded-xl shadow-lg">
         <h3 id="modal-title" class="font-bold text-2xl text-[#1F2937] mb-2">
@@ -153,7 +155,7 @@
             class="bg-[#00A96E] text-white px-3 py-1 rounded-full text-xs font-medium"
             >Opened</span
           >
-          <span>• Opened by <span id="modal-author">Fahim Ahmed</span></span>
+          <span>• Opened by <span id="modal-author">Author Name</span></span>
           <span>• <span id="modal-date">22/02/2026</span></span>
         </div>
 
@@ -165,17 +167,17 @@
         </p>
 
         <div
-          class="bg-[#F8FAFC] p-4 rounded-lg flex justify-between items-center mb-8"
+          class="bg-[#F8FAFC] p-4 rounded-lg flex items-center mb-8"
         >
-          <div>
+          <div class="flex-1">
             <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">
               Assignee:
             </p>
             <p id="modal-assignee" class="font-semibold text-[#1F2937]">
-              Fahim Ahmed
+              Assignee Name
             </p>
           </div>
-          <div>
+          <div class="flex-1">
             <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">
               Priority:
             </p>

@@ -5,11 +5,40 @@ const closedBtn = document.getElementById("closed-btn");
 const btnContainer = document.getElementById("btn-container");
 const countIssues = document.getElementById("count-issues");
 const loadingSpinner = document.getElementById("loading-spinner");
+const searchInput = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
+
+const activateAllButton = () => {
+  openBtn.classList.remove("bg-[#4A00FF]", "text-white");
+  closedBtn.classList.remove("bg-[#4A00FF]", "text-white");
+  allBtn.classList.add("bg-[#4A00FF]", "text-white");
+};
+
+const handleSearch = () => {
+  activateAllButton();
+  const searchText = searchInput.value.toLowerCase();
+  if (searchText === "") {
+    displayCard(allIssues);
+    return;
+  }
+  const filteredIssues = allIssues.filter((card) =>
+    card.title.toLowerCase().includes(searchText)
+  );
+
+  displayCard(filteredIssues);
+};
+searchBtn.addEventListener("click", handleSearch);
+searchInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") handleSearch();
+});
+searchInput.addEventListener("input", handleSearch);
+
 const priorityConfig = {
   high: { bg: "bg-[#FEECEC]", text: "text-[#EF4444]" },
   medium: { bg: "bg-[#FFF6D1]", text: "text-[#F59E0B]" },
   low: { bg: "bg-[#EEEFF2]", text: "text-[#9CA3AF]" },
 };
+
 const labelConfig = {
   bug: {
     bg: "bg-[#FEECEC]",
@@ -43,9 +72,9 @@ const labelConfig = {
   },
 };
 
+//Fetch card from API
 const loadCards = () => {
   loadingSpinner.style.display = "flex";
-  
   setTimeout(() => {
     fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
       .then((res) => res.json())
@@ -83,26 +112,22 @@ btnContainer.addEventListener("click", (event) => {
   }
 });
 
+//Display card Function
 const displayCard = (cards) => {
   countIssues.innerText = cards.length;
-  //   1.get the container &empty
   const cardContainer = document.getElementById("card-container");
   cardContainer.innerHTML = "";
-  // 2. create element div and inner html
 
   for (let card of cards) {
-    console.log(card.status);
     const cardDiv = document.createElement("div");
     cardDiv.innerHTML = `
         <div id="card" class="flex flex-col h-full p-4 rounded-lg shadow bg-white border-t-4 ${card.status === "open" ? "border-[#00A96E]" : "border-[#A855F7]"}">
 
         <div class="flex justify-between items-center mb-3">
           <img src="${card.status === "open" ? "./assets/Open-Status.png" : "./assets/Closed-Status.png"}" alt="" />
-          <button class="${
-            card.priority === "high"? priorityConfig.high
-            :card.priority === "medium"?priorityConfig.medium
-            :priorityConfig.low
-          } px-6 py-2 rounded-[100px]      uppercase text-xs font-medium">${card.priority}</button>  
+          <button class="${priorityConfig[card.priority]?.bg} 
+          ${priorityConfig[card.priority]?.text} 
+          px-6 py-2 rounded-[100px] uppercase text-xs font-medium">${card.priority}</button>  
         </div>
         <div>
           <h4 class="text-sm font-semibold text-[#1F2937] mb-2 min-h-10 flex items-center">
@@ -134,20 +159,22 @@ const displayCard = (cards) => {
             <p class="mb-2 text-[#64748B] text-xs">#${card.id} by ${card.author}</p>
             <p class="text-[#64748B] text-xs">
           ${new Date(card.createdAt).toLocaleDateString("en-US")}
-</p>
+          </p>
           </div>
         </div>
       </div>
         `;
+    
     // Show information in modal
     cardDiv.addEventListener("click", () => {
       document.getElementById("modal-title").innerText = card.title;
       document.getElementById("modal-desc").innerText = card.description;
       document.getElementById("modal-author").innerText = card.author;
       document.getElementById("modal-date").innerText = new Date(
-      card.createdAt,).toLocaleDateString();
+        card.createdAt,
+      ).toLocaleDateString();
       document.getElementById("modal-assignee").innerText =
-      card.assignee || "Unassigned";
+        card.assignee || "Unassigned";
 
       // Status show in modal
       const statusEl = document.getElementById("modal-status");
