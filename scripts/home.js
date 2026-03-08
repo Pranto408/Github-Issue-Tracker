@@ -8,31 +8,6 @@ const loadingSpinner = document.getElementById("loading-spinner");
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 
-const activateAllButton = () => {
-  openBtn.classList.remove("bg-[#4A00FF]", "text-white");
-  closedBtn.classList.remove("bg-[#4A00FF]", "text-white");
-  allBtn.classList.add("bg-[#4A00FF]", "text-white");
-};
-
-const handleSearch = () => {
-  activateAllButton();
-  const searchText = searchInput.value.toLowerCase();
-  if (searchText === "") {
-    displayCard(allIssues);
-    return;
-  }
-  const filteredIssues = allIssues.filter((card) =>
-    card.title.toLowerCase().includes(searchText)
-  );
-
-  displayCard(filteredIssues);
-};
-searchBtn.addEventListener("click", handleSearch);
-searchInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") handleSearch();
-});
-searchInput.addEventListener("input", handleSearch);
-
 const priorityConfig = {
   high: { bg: "bg-[#FEECEC]", text: "text-[#EF4444]" },
   medium: { bg: "bg-[#FFF6D1]", text: "text-[#F59E0B]" },
@@ -72,6 +47,34 @@ const labelConfig = {
   },
 };
 
+
+//Search functionality 
+const handleSearch = () => {
+  activateAllButton();
+  const searchText = searchInput.value.toLowerCase();
+  if (searchText === "") {
+    displayCard(allIssues);
+    return;
+  }
+  const filteredIssues = allIssues.filter((card) =>
+    card.title.toLowerCase().includes(searchText)
+  );
+  displayCard(filteredIssues);
+};
+
+searchBtn.addEventListener("click", handleSearch);
+searchInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") handleSearch();
+});
+searchInput.addEventListener("input", handleSearch);
+
+// Active All Button
+const activateAllButton = () => {
+  openBtn.classList.remove("bg-[#4A00FF]", "text-white");
+  closedBtn.classList.remove("bg-[#4A00FF]", "text-white");
+  allBtn.classList.add("bg-[#4A00FF]", "text-white");
+};
+
 //Fetch card from API
 const loadCards = () => {
   loadingSpinner.style.display = "flex";
@@ -83,7 +86,7 @@ const loadCards = () => {
         loadingSpinner.style.display = "none";
         displayCard(allIssues);
       });
-  }, 2000);
+  }, 1000);
 };
 loadCards();
 
