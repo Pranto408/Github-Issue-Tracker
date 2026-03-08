@@ -95,11 +95,14 @@
       </div>
     </section>
     <!-- Card section  -->
+    <div id="loading-spinner" class="hidden justify-center py-10">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
     <section
       id="card-container"
       class="w-[80%] mx-auto p-6 bg-[#FBFBFB] grid grid-cols-4 items-stretch gap-3 rounded-lg shadow-lg"
     >
-      <div
+      <!-- <div
         id="card"
         class="p-4 rounded-lg shadow bg-white border-t-4 border-[#00A96E]"
       >
@@ -135,9 +138,66 @@
             <p class="text-[#64748B] text-xs">1/15/2024</p>
           </div>
         </div>
-      </div>
+      </div> -->
     </section>
+    <!-- Modal Part  -->
+    <dialog id="issue-modal" class="modal">
+      <div class="modal-box w-11/12 max-w-lg p-6 bg-white rounded-xl shadow-lg">
+        <h3 id="modal-title" class="font-bold text-2xl text-[#1F2937] mb-2">
+          Fix broken image uploads
+        </h3>
 
+        <div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+          <span
+            id="modal-status"
+            class="bg-[#00A96E] text-white px-3 py-1 rounded-full text-xs font-medium"
+            >Opened</span
+          >
+          <span>• Opened by <span id="modal-author">Fahim Ahmed</span></span>
+          <span>• <span id="modal-date">22/02/2026</span></span>
+        </div>
+
+        <div id="modal-labels" class="flex gap-2 mb-6"></div>
+
+        <p id="modal-desc" class="text-[#64748B] mb-8 leading-relaxed">
+          The navigation menu doesn't collapse properly on mobile devices. Need
+          to fix the responsive behavior.
+        </p>
+
+        <div
+          class="bg-[#F8FAFC] p-4 rounded-lg flex justify-between items-center mb-8"
+        >
+          <div>
+            <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">
+              Assignee:
+            </p>
+            <p id="modal-assignee" class="font-semibold text-[#1F2937]">
+              Fahim Ahmed
+            </p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">
+              Priority:
+            </p>
+            <span
+              id="modal-priority"
+              class="bg-[#EF4444] text-white px-4 py-1 rounded-full text-xs font-bold uppercase"
+              >High</span
+            >
+          </div>
+        </div>
+
+        <div class="modal-action">
+          <form method="dialog">
+            <button
+              class="btn bg-[#4A00FF] text-white px-8 rounded-lg hover:bg-indigo-700"
+            >
+              Close
+            </button>
+          </form>
+        </div>
+      </div>
+    </dialog>
     <script src="./scripts/home.js"></script>
   </body>
 </html>

@@ -1,9 +1,15 @@
+let allIssues = [];
 const allBtn = document.getElementById("all-btn");
 const openBtn = document.getElementById("open-btn");
 const closedBtn = document.getElementById("closed-btn");
 const btnContainer = document.getElementById("btn-container");
 const countIssues = document.getElementById("count-issues");
-
+const loadingSpinner = document.getElementById("loading-spinner");
+const priorityConfig = {
+  high: { bg: "bg-[#FEECEC]", text: "text-[#EF4444]" },
+  medium: { bg: "bg-[#FFF6D1]", text: "text-[#F59E0B]" },
+  low: { bg: "bg-[#EEEFF2]", text: "text-[#9CA3AF]" },
+};
 const labelConfig = {
   bug: {
     bg: "bg-[#FEECEC]",
@@ -37,41 +43,54 @@ const labelConfig = {
   },
 };
 
+const loadCards = () => {
+  loadingSpinner.style.display = "flex";
+  
+  setTimeout(() => {
+    fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
+      .then((res) => res.json())
+      .then((json) => {
+        allIssues = json.data;
+        loadingSpinner.style.display = "none";
+        displayCard(allIssues);
+      });
+  }, 2000);
+};
+loadCards();
+
 // Toggle Button
 btnContainer.addEventListener("click", (event) => {
   if (event.target === allBtn) {
     openBtn.classList.remove("bg-[#4A00FF]", "text-white");
     closedBtn.classList.remove("bg-[#4A00FF]", "text-white");
     allBtn.classList.add("bg-[#4A00FF]", "text-white");
+    const filteredAll = allIssues;
+    displayCard(filteredAll);
   }
   if (event.target === openBtn) {
     openBtn.classList.add("bg-[#4A00FF]", "text-white");
     closedBtn.classList.remove("bg-[#4A00FF]", "text-white");
     allBtn.classList.remove("bg-[#4A00FF]", "text-white");
+    const filteredOpen = allIssues.filter((i) => i.status === "open");
+    displayCard(filteredOpen);
   }
   if (event.target === closedBtn) {
     openBtn.classList.remove("bg-[#4A00FF]", "text-white");
     closedBtn.classList.add("bg-[#4A00FF]", "text-white");
     allBtn.classList.remove("bg-[#4A00FF]", "text-white");
+    const filteredClosed = allIssues.filter((i) => i.status === "closed");
+    displayCard(filteredClosed);
   }
 });
 
-const loadCards = () => {
-  fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
-    .then((res) => res.json())
-    .then((json) => displayCard(json.data));
-};
-loadCards();
-
 const displayCard = (cards) => {
-          countIssues.innerText = cards.length;
+  countIssues.innerText = cards.length;
   //   1.get the container &empty
   const cardContainer = document.getElementById("card-container");
   cardContainer.innerHTML = "";
   // 2. create element div and inner html
 
-    for (let card of cards) {
-
+  for (let card of cards) {
     console.log(card.status);
     const cardDiv = document.createElement("div");
     cardDiv.innerHTML = `
@@ -80,11 +99,9 @@ const displayCard = (cards) => {
         <div class="flex justify-between items-center mb-3">
           <img src="${card.status === "open" ? "./assets/Open-Status.png" : "./assets/Closed-Status.png"}" alt="" />
           <button class="${
-            card.priority === "high"
-              ? "text-[#EF4444] bg-[#FEECEC]"
-              : card.priority === "medium"
-                ? "text-[#F59E0B] bg-[#FFF6D1]"
-                : "text-[#9CA3AF] bg-[#EEEFF2]"
+            card.priority === "high"? priorityConfig.high
+            :card.priority === "medium"?priorityConfig.medium
+            :priorityConfig.low
           } px-6 py-2 rounded-[100px]      uppercase text-xs font-medium">${card.priority}</button>  
         </div>
         <div>
@@ -100,17 +117,17 @@ const displayCard = (cards) => {
           </p>
           <div class="flex flex-wrap gap-2 pb-4 border-b border-[#E4E4E7]">
             ${card.labels
-         .map((label) => {
-           const style = labelConfig[label];
+              .map((label) => {
+                const style = labelConfig[label];
 
-      return `
-      <button class="uppercase border-2 ${style.border} rounded-[100px] ${style.bg} ${style.text} text-xs font-medium px-2 py-1.5 flex items-center gap-1">
-        <i class="${style.icon}"></i> ${label}
-      </button>
-    `;
-    })
-    .join("")}
-</div>
+                return `
+            <button class="uppercase border-2 ${style.border} rounded-[100px] ${style.bg} ${style.text} text-xs font-medium px-2 py-1.5 flex items-center gap-1">
+              <i class="${style.icon}"></i> ${label}
+              </button>
+              `;
+              })
+              .join("")}
+            </div>
 
 
           <div class="pt-4">
@@ -122,6 +139,43 @@ const displayCard = (cards) => {
         </div>
       </div>
         `;
+    // Show information in modal
+    cardDiv.addEventListener("click", () => {
+      document.getElementById("modal-title").innerText = card.title;
+      document.getElementById("modal-desc").innerText = card.description;
+      document.getElementById("modal-author").innerText = card.author;
+      document.getElementById("modal-date").innerText = new Date(
+      card.createdAt,).toLocaleDateString();
+      document.getElementById("modal-assignee").innerText =
+      card.assignee || "Unassigned";
+
+      // Status show in modal
+      const statusEl = document.getElementById("modal-status");
+      statusEl.innerText = card.status;
+      statusEl.className =
+        card.status === "open"
+          ? "bg-[#00A96E] text-white px-3 py-1 rounded-full text-xs font-medium"
+          : "bg-[#A855F7] text-white px-3 py-1 rounded-full text-xs font-medium";
+
+      // Priority show in modal
+      const priorityEl = document.getElementById("modal-priority");
+      const pStyle = priorityConfig[card.priority];
+      priorityEl.innerText = card.priority.toUpperCase();
+      priorityEl.className = `${pStyle.bg} ${pStyle.text} px-4 py-1 rounded-full text-xs font-bold uppercase`;
+
+      // Level show in modal
+      const modalLabelsContainer = document.getElementById("modal-labels");
+      modalLabelsContainer.innerHTML = "";
+      card.labels.forEach((label) => {
+        const style = labelConfig[label];
+        const labelBtn = document.createElement("button");
+        labelBtn.className = `uppercase border-2 ${style.border} rounded-[100px] ${style.bg} ${style.text} text-[10px] font-bold px-3 py-1 flex items-center gap-1`;
+        labelBtn.innerHTML = `<i class="${style.icon}"></i> ${label}`;
+        modalLabelsContainer.appendChild(labelBtn);
+      });
+
+      document.getElementById("issue-modal").showModal();
+    });
     cardContainer.appendChild(cardDiv);
   }
 };
