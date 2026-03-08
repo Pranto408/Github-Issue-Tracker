@@ -50,15 +50,24 @@ const labelConfig = {
 
 //Search functionality 
 const handleSearch = () => {
-  activateAllButton();
   const searchText = searchInput.value.toLowerCase();
+
+  let currentList = allIssues;
+  if (openBtn.classList.contains("bg-[#4A00FF]")) {
+    currentList = allIssues.filter((i) => i.status === "open");
+  } else if (closedBtn.classList.contains("bg-[#4A00FF]")) {
+    currentList = allIssues.filter((i) => i.status === "closed");
+  }
+
   if (searchText === "") {
-    displayCard(allIssues);
+    displayCard(currentList);
     return;
   }
-  const filteredIssues = allIssues.filter((card) =>
-    card.title.toLowerCase().includes(searchText)
+
+  const filteredIssues = currentList.filter(
+    (card) =>card.title.toLowerCase().includes(searchText)
   );
+
   displayCard(filteredIssues);
 };
 
@@ -67,13 +76,6 @@ searchInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") handleSearch();
 });
 searchInput.addEventListener("input", handleSearch);
-
-// Active All Button
-const activateAllButton = () => {
-  openBtn.classList.remove("bg-[#4A00FF]", "text-white");
-  closedBtn.classList.remove("bg-[#4A00FF]", "text-white");
-  allBtn.classList.add("bg-[#4A00FF]", "text-white");
-};
 
 //Fetch card from API
 const loadCards = () => {
